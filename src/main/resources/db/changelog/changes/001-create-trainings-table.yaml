@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001
+      author: system
+      changes:
+        - createTable:
+            tableName: trainings
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT

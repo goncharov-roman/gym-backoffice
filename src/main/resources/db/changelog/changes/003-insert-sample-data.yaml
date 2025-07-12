@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003
+      author: system
+      changes:
+        - insert:
+            tableName: trainings
+            columns:
+              - column:
+                  name: name
+                  value: "Йога для начинающих"
+              - column:
+                  name: description
+                  value: "Расслабляющая йога для всех уровней подготовки"
+        - insert:
+            tableName: trainings
+            columns:
+              - column:
+                  name: name
+                  value: "Силовая тренировка"
+              - column:
+                  name: description
+                  value: "Интенсивная тренировка для развития силы"
+        - insert:
+            tableName: trainings
+            columns:
+              - column:
+                  name: name
+                  value: "Кардио тренировка"
+              - column:
+                  name: description
+                  value: "Высокоинтенсивная кардио тренировка" 

@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changes/001-create-trainings-table.yaml
+  - include:
+      file: db/changelog/changes/002-create-training-participants-table.yaml
+  - include:
+      file: db/changelog/changes/003-insert-sample-data.yaml
+  - include:
+      file: db/changelog/changes/004-add-columns-trainings-table.yaml
