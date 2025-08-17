@@ -8,32 +8,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/trainings")
 @CrossOrigin(origins = "*")
 public class TrainingController {
-    
+
     private final TrainingService trainingService;
-    
+
     public TrainingController(TrainingService trainingService) {
         this.trainingService = trainingService;
     }
-    
+
     @GetMapping
-    public ResponseEntity<List<Training>> getAllTrainings() {
-        List<Training> trainings = trainingService.getAllTrainings();
-        return ResponseEntity.ok(trainings);
+    public List<Training> getAllTrainings() {
+        return trainingService.getAllTrainings();
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<Training> getTrainingById(@PathVariable Long id) {
         return trainingService.getTrainingById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
-    
+
     @PostMapping
     public ResponseEntity<Training> createTraining(@Valid @RequestBody TrainingDto trainingDto) {
         try {
@@ -43,17 +43,16 @@ public class TrainingController {
             return ResponseEntity.badRequest().build();
         }
     }
-    
+
     @PutMapping("/{id}")
     public ResponseEntity<Training> updateTraining(@PathVariable Long id, @Valid @RequestBody TrainingDto trainingDto) {
         return trainingService.updateTraining(id, trainingDto)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
-    
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTraining(@PathVariable Long id) {
+    public void deleteTraining(@PathVariable Long id) {
         trainingService.deleteTraining(id);
-        return ResponseEntity.noContent().build();
     }
 } 
