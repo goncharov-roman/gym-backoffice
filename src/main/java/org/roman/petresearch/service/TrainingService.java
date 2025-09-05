@@ -1,5 +1,8 @@
 package org.roman.petresearch.service;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.roman.petresearch.dto.TrainingDto;
 import org.roman.petresearch.entity.Training;
@@ -14,18 +17,16 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class TrainingService {
-    
-    private final TrainingRepository trainingRepository;
-    
-    public TrainingService(TrainingRepository trainingRepository) {
-        this.trainingRepository = trainingRepository;
-    }
-    
+
+    TrainingRepository trainingRepository;
+
     public List<Training> getAllTrainings() {
         return trainingRepository.findAllOrderByName();
     }
-    
+
     @Cacheable(value = "trainings", key = "#id", unless = "#result == null")
     public Optional<Training> getTrainingById(Long id) {
         try {
@@ -36,7 +37,7 @@ public class TrainingService {
             return Optional.empty();
         }
     }
-    
+
     public Training createTraining(TrainingDto trainingDto) {
         Training training = new Training();
         training.setName(trainingDto.name());
@@ -44,26 +45,28 @@ public class TrainingService {
         training.setStartedAt(Instant.now());
         training.setType(trainingDto.type());
         training.setStatus(trainingDto.status());
-        
+
         return trainingRepository.save(training);
     }
-    
+
     @CacheEvict(value = "trainings", key = "#id")
     public Optional<Training> updateTraining(Long id, TrainingDto trainingDto) {
         return trainingRepository.findById(id)
-            .map(existingTraining -> {
-                existingTraining.setName(trainingDto.name());
-                existingTraining.setDescription(trainingDto.description());
-                
-                return trainingRepository.save(existingTraining);
-            });
+                .map(existingTraining -> {
+                    existingTraining.setName(trainingDto.name());
+                    existingTraining.setDescription(trainingDto.description());
+                    existingTraining.setType(trainingDto.type());
+                    existingTraining.setStatus(trainingDto.status());
+
+                    return trainingRepository.save(existingTraining);
+                });
     }
-    
+
     @CacheEvict(value = "trainings", key = "#id")
     public void deleteTraining(Long id) {
         trainingRepository.deleteById(id);
     }
-    
+
     @CacheEvict(value = "trainings", allEntries = true)
     public void clearCache() {
         log.debug("Clearing all training caches");

@@ -10,10 +10,10 @@ import java.util.List;
 
 @Repository
 public interface TrainingRepository extends CrudRepository<Training, Long> {
-    
+
     @Query("SELECT * FROM trainings ORDER BY name")
     List<Training> findAllOrderByName();
-    
+
     @Query("SELECT * FROM trainings WHERE name ILIKE :name ORDER BY name")
     List<Training> findByNameContaining(@Param("name") String name);
 } 
