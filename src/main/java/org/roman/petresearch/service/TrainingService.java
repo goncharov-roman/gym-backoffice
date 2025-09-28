@@ -38,6 +38,10 @@ public class TrainingService {
         }
     }
 
+    public List<Training> getTrainingsStartingBetween(Instant startTime, Instant endTime) {
+        return trainingRepository.findByStartedAtBetween(startTime, endTime);
+    }
+
     public Training createTraining(TrainingDto trainingDto) {
         Training training = new Training();
         training.setName(trainingDto.name());
@@ -71,4 +75,4 @@ public class TrainingService {
     public void clearCache() {
         log.debug("Clearing all training caches");
     }
-} 
+}
