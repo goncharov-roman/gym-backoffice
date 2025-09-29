@@ -14,7 +14,7 @@ The Quartz scheduler has been integrated to provide automated training reminders
 
 ### 2. Configuration
 - `QuartzConfig.java` - Configures job details and triggers
-- `application.properties` - Quartz database configuration
+- `application.yml` - Quartz database configuration
 
 ### 3. Scheduled Jobs
 
@@ -44,18 +44,31 @@ The Quartz scheduler has been integrated to provide automated training reminders
 
 ### Database Storage
 Quartz is configured to use PostgreSQL for job persistence with string-based job data storage:
-```properties
-spring.quartz.job-store-type=jdbc
-spring.quartz.jdbc.initialize-schema=always
-spring.quartz.wait-for-jobs-to-complete-on-shutdown=true
-spring.quartz.properties.org.quartz.jobStore.driverDelegateClass=org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
-spring.quartz.properties.org.quartz.jobStore.tablePrefix=QRTZ_
-spring.quartz.properties.org.quartz.jobStore.useProperties=true
+```yaml
+spring:
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
+    wait-for-jobs-to-complete-on-shutdown: true
+    properties:
+      org:
+        quartz:
+          jobStore:
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+            tablePrefix: QRTZ_
+            useProperties: true
 
 # Actuator Configuration
-management.endpoints.web.exposure.include=health,info,quartz
-management.endpoint.quartz.enabled=true
-management.endpoint.quartz.show-details=always
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,quartz
+  endpoint:
+    quartz:
+      enabled: true
+      show-details: always
 ```
 
 ### Job Scheduling
@@ -83,10 +96,21 @@ Jobs run automatically every 5 minutes. You can monitor execution through:
 3. **Database Queries**: Check `QRTZ_JOB_DETAILS` and `QRTZ_TRIGGERS` tables
 
 ### Test Configuration
-Tests use in-memory Quartz configuration via `src/test/resources/application.properties`:
-```properties
-spring.quartz.job-store-type=memory
-spring.quartz.properties.org.quartz.jobStore.class=org.quartz.simpl.RAMJobStore
+Tests use in-memory Quartz configuration via `src/test/resources/application.yml`:
+```yaml
+spring:
+  quartz:
+    job-store-type: memory
+    properties:
+      org:
+        quartz:
+          jobStore:
+            class: org.quartz.simpl.RAMJobStore
+          threadPool:
+            threadCount: 1
+          scheduler:
+            instanceName: TestScheduler
+            instanceId: AUTO
 ```
 
 ## Database Schema
@@ -133,8 +157,10 @@ Job execution metrics can be monitored through:
 
 ### Debug Mode
 Enable debug logging for Quartz:
-```properties
-logging.level.org.quartz=DEBUG
-logging.level.org.roman.petresearch.job=DEBUG
+```yaml
+logging:
+  level:
+    org.quartz: DEBUG
+    org.roman.petresearch.job: DEBUG
 ```
 

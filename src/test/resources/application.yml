@@ -1,0 +1,13 @@
+spring:
+  quartz:
+    job-store-type: memory
+    properties:
+      org:
+        quartz:
+          jobStore:
+            class: org.quartz.simpl.RAMJobStore
+          threadPool:
+            threadCount: 1
+          scheduler:
+            instanceName: TestScheduler
+            instanceId: AUTO
